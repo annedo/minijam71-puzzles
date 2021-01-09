@@ -1,0 +1,1 @@
+# minijam71-puzzles
