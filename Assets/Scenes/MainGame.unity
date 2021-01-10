@@ -343,8 +343,8 @@ MonoBehaviour:
   Quota: 200
   MoneyText: {fileID: 1539964939}
   QuotaText: {fileID: 2023792764}
-  BelowQuotaColor: {r: 0.8962264, g: 0.080322154, b: 0.080322154, a: 0}
-  MetQuotaColor: {r: 0.3853648, g: 0.8113208, b: 0.026788909, a: 0}
+  BelowQuotaColor: {r: 0.8962264, g: 0.080322154, b: 0.080322154, a: 1}
+  MetQuotaColor: {r: 0.3853648, g: 0.8113208, b: 0.026788909, a: 1}
 --- !u!114 &437659627
 MonoBehaviour:
   m_ObjectHideFlags: 0
