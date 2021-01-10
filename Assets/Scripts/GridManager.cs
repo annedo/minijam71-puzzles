@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GridManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class GridManager : MonoBehaviour
     private float _tileSize = 1;
 
     public RandomIconHelper _randomIcons;
+    public Money _money;
+    public Moves _moves;
         
     private const int _gridHorizontalOffSet = -5;
 
@@ -76,6 +79,9 @@ public class GridManager : MonoBehaviour
                     points += nextPoints;
                     _grid.FallDown();
                 }
+
+                _money.CurrentMoney += points;
+                _moves.MovesRemaining--;
             }
             else
             {
@@ -86,5 +92,18 @@ public class GridManager : MonoBehaviour
         }
 
         _grid.ClearSelections();
+        CheckMovesRemaining();        
+    }
+
+    public void CheckMovesRemaining()
+    {
+        if (_moves.MovesRemaining <= 0)
+        {
+            // Check quota
+            if (_money.CurrentMoney < _money.Quota)
+                SceneManager.LoadScene("Gameover");
+            else
+                SceneManager.LoadScene("Upgrades");
+        }
     }
 }
