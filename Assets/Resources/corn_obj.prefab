@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -866709850877540929}
   m_Layer: 0
   m_Name: corn_obj
-  m_TagString: Untagged
+  m_TagString: Corn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
