@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: GridLayer
+    uniqueID: 2129347799
+    locked: 0
+  - name: IconLayer
+    uniqueID: 3298345109
+    locked: 0

@@ -12,47 +12,66 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private float _tileSize = 1;
 
+    private GameObject _gridTileRef;
+    private GameObject _cornTileRef;
+    private const int _gridHorizontalOffSet = -5;
+
     public void Start()
     {
+        _gridTileRef = (GameObject)Instantiate(Resources.Load("GridTile"));
+        _cornTileRef = (GameObject)Instantiate(Resources.Load("corn_obj Variant"));
+
         GenerateGrid();
 
-        SetGridPosition();
+        // Set grid position
+        transform.position = new Vector2(GridXPos, GridYPos);
+
+        FillGrid();
+
+        Destroy(_gridTileRef);
+        Destroy(_cornTileRef);
     }
 
     public void Update()
     {
-        
+
     }
 
-    private void GenerateGrid()
+    private float GridHeight => _rows * _tileSize;
+    private float GridWidth => _cols * _tileSize;
+    private float GridXPos => (-GridWidth + _tileSize) / 2 + _gridHorizontalOffSet;
+    private float GridYPos => (GridHeight - _tileSize) / 2;
+
+    private void FillGrid()
     {
-        var gridTile = (GameObject)Instantiate(Resources.Load("GridTile"));
-        
+        /*
+        var random = new System.Random();
+        var spawnColumn = random.Next(1, _cols);
+        */
+
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _cols; col++)
             {
-                GameObject tile = Instantiate(gridTile, transform);
+                var cornTile = Instantiate(_cornTileRef, transform);
+                cornTile.transform.position = new Vector2(GridXPos + (col * _tileSize) + (_tileSize / 2), GridYPos - (row * _tileSize) - (_tileSize/3));
+            }
+        }                
+    }
+
+    private void GenerateGrid()
+    {
+        for (int row = 0; row < _rows; row++)
+        {
+            for (int col = 0; col < _cols; col++)
+            {
+                var gridTile = Instantiate(_gridTileRef, transform);
 
                 float posX = col * _tileSize;
                 float posY = row * -_tileSize;
 
-                tile.transform.position = new Vector2(posX, posY);
+                gridTile.transform.position = new Vector2(posX, posY);
             }
-        }
-
-        Destroy(gridTile);        
-    }
-
-    private void SetGridPosition()
-    {
-        var gridHeight = _rows * _tileSize;
-        var gridWidth = _cols * _tileSize;
-        var xOffSet = -5;
-
-        var gridXPos = (-gridWidth + _tileSize) / 2 + xOffSet;
-        var gridYPos = (gridHeight - _tileSize) / 2;
-
-        transform.position = new Vector2(gridXPos, gridYPos);
+        }         
     }
 }
