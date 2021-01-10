@@ -140,28 +140,36 @@ public class GridManager : MonoBehaviour
     private float _tileSize = 1;
 
     private GameObject _gridTileRef;
+
     private GameObject _cornTileRef;
+    private GameObject _chickenTileRef;
+    private GameObject _tireTileRef;
+    private GameObject _hayTileRef;
+    
     private const int _gridHorizontalOffSet = -5;
 
     private GameGrid _grid;
 
+    private System.Random _random = new System.Random();
+
     public void Start()
     {
         _gridTileRef = (GameObject)Instantiate(Resources.Load("GridTile"));
-        _cornTileRef = (GameObject)Instantiate(Resources.Load("corn_obj Variant"));
+        _cornTileRef = (GameObject)Instantiate(Resources.Load("corn_obj"));
+        _chickenTileRef = (GameObject)Instantiate(Resources.Load("chicken_obj"));
+        _tireTileRef = (GameObject)Instantiate(Resources.Load("tire_obj"));
+        _hayTileRef = (GameObject)Instantiate(Resources.Load("hay_obj"));
 
         _grid = new GameGrid(_rows, _cols, new Vector2(GridXPos, GridYPos), _tileSize);
 
         FillGrid();
-        _grid.SetGridPositions();        
+        _grid.SetGridPositions();
 
         Destroy(_gridTileRef);
         Destroy(_cornTileRef);
-    }
-
-    public void Update()
-    {
-
+        Destroy(_chickenTileRef);
+        Destroy(_tireTileRef);
+        Destroy(_hayTileRef);
     }
 
     private float GridHeight => _rows * _tileSize;
@@ -171,18 +179,31 @@ public class GridManager : MonoBehaviour
 
     public void FillGrid()
     {
-        /*
-        var random = new System.Random();
-        var spawnColumn = random.Next(1, _cols);
-        */
-
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _cols; col++)
-            {
-                var cornTile = Instantiate(_cornTileRef, transform);
-                _grid.AddGameObject(cornTile, row, col);
+            {                
+                _grid.AddGameObject(GetRandomTile(), row, col);
             }
+        }
+    }
+
+    public GameObject GetRandomTile()
+    {
+        var spawnType = _random.Next(1, 5); // 1, 2, 3 or 4
+
+        switch (spawnType)
+        {
+            case 1:
+                return Instantiate(_cornTileRef, transform);
+            case 2:
+                return Instantiate(_chickenTileRef, transform);
+            case 3:
+                return Instantiate(_hayTileRef, transform);
+            case 4:
+                return Instantiate(_tireTileRef, transform);
+            default:
+                return null;
         }
     }
 
