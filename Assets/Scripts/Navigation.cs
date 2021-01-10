@@ -15,6 +15,9 @@ public class Navigation : MonoBehaviour
             case "Gameover":
                 SceneManager.LoadScene("MainMenu");
                 break;
+            case "Upgrades":
+                SceneManager.LoadScene("MainGame");
+                break;
             default:
                 break;
         }
