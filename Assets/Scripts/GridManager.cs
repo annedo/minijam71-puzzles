@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameGrid
+public class GameGrid : MonoBehaviour
 {
     private readonly GameObject[,] _grid;
     private readonly Vector2 _gridPos;
     private readonly float _tileSize;
+
 
     public GameGrid(int rows, int cols, Vector2 gridPos, float tileSize)
     {
@@ -23,13 +24,14 @@ public class GameGrid
 
     public void RemoveGameObject(int row, int col)
     {
+        Destroy(_grid[row, col]);
         _grid[row, col] = null;
     }
 
     public GameObject PopGameObject(int row, int col)
     {
         var pop = _grid[row, col];
-        RemoveGameObject(row, col);
+        _grid[row, col] = null;
 
         return pop;
     }
@@ -145,16 +147,16 @@ public class GameGrid
         // Set empty fields to the one above, chaining all the way up
 
         // Top most field should be a new random icon type
+
+        SetGridPositions();
     }
 
     /// <summary>
-    /// Finds and empties out matches recursively.
+    /// Finds and empties out matches.
     /// </summary>
-    /// <returns>The total points from all the matches.</returns>
-    public int FindMatches(int points = 0)
+    /// <returns>The total points from the first match found.</returns>
+    public int FindMatches()
     {
-        var currentPoints = points;
-
         // Search rows for matches
         for (int row = 0; row < _grid.GetLength(0); row++)
         {
@@ -171,10 +173,12 @@ public class GameGrid
                     )
                 {
                     // Delete all objects in the found matches
-                    _grid[row, col] = _grid[row, col+1] = _grid[row, col+2] = null;
-                    points += 1;
+                    RemoveGameObject(row, col);
+                    RemoveGameObject(row, col + 1);
+                    RemoveGameObject(row, col + 2);
                     SetGridPositions();
-                    // Found match, continue checking for 3+
+                    return 1;
+                    // TODO - continue checking for 3+
                 }
             }
         }
@@ -195,14 +199,18 @@ public class GameGrid
                     )
                 {
                     // Delete all objects in the found matches
-                    _grid[row, col] = _grid[row + 1, col] = _grid[row + 2, col] = null;
-                    points += 1;
+                    RemoveGameObject(row, col);
+                    RemoveGameObject(row + 1, col);
+                    RemoveGameObject(row + 2, col);
                     SetGridPositions();
-                    // Found match, continue checking for 3+
+                    return 1;
+                    // TODO - continue checking for 3+
                 }
             }
         }
 
+        return 0;
+        /*
         if (points == 0 || currentPoints == points)
             return points;
 
@@ -210,6 +218,7 @@ public class GameGrid
         SetGridPositions();
 
         return FindMatches(points);
+        */
     }
 }
 
@@ -243,6 +252,7 @@ public class GridManager : MonoBehaviour
         _tireTileRef = (GameObject)Instantiate(Resources.Load("tire_obj"));
         _hayTileRef = (GameObject)Instantiate(Resources.Load("hay_obj"));
 
+        //_grid = gameObject.AddComponent<GameGrid>();
         _grid = new GameGrid(_rows, _cols, new Vector2(GridXPos, GridYPos), _tileSize);
 
         FillGrid();
@@ -310,9 +320,23 @@ public class GridManager : MonoBehaviour
             _grid.SwapSelections();
             _grid.SetGridPositions();
 
-            if (_grid.FindMatches() > 0)
-            {
+            var points = _grid.FindMatches();
 
+            if (points > 0) // Continue loop
+            {
+                _grid.FallDown();                
+
+                /*
+                while (true)
+                {
+                    var nextPoints = _grid.FindMatches();
+                    if (nextPoints == 0)
+                        break;
+                    
+                    points += nextPoints;
+                    _grid.FallDown();
+                }
+                */
             }
             else
             {
@@ -321,9 +345,7 @@ public class GridManager : MonoBehaviour
                 _grid.SetGridPositions();
             }            
         }
-        else
-        {
-            _grid.ClearSelections();
-        }
+
+        _grid.ClearSelections();
     }
 }

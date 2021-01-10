@@ -95,6 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd1827284cda9946bd87e71150e59a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteUnselected: {fileID: 21300000, guid: 472b62d8bc647a24da04426c10ac0649, type: 3}
+  spriteSelected: {fileID: 21300000, guid: dbb8288be093b2f46b97d78f7ffedcc2, type: 3}
   Selected: 0
 --- !u!61 &-541040583636074021
 BoxCollider2D:
