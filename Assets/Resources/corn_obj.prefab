@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5030868928524542884}
   - component: {fileID: 8188259774342065487}
   - component: {fileID: -866709850877540929}
+  - component: {fileID: -8084165411545134573}
   m_Layer: 0
   m_Name: corn_obj
   m_TagString: Corn
@@ -95,3 +96,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Selected: 0
+--- !u!61 &-8084165411545134573
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108943569829277661}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.71875, y: 2.046875}
+    newSize: {x: 2.2, y: 2.62}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.71875, y: 2.046875}
+  m_EdgeRadius: 0

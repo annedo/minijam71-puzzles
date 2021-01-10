@@ -131,11 +131,11 @@ public class GameGrid
     {
         var (x1, y1, x2, y2) = GetSelectionCoordinates();
 
-        var obj1 = PopGameObject(x1, y1);
-        var obj2 = PopGameObject(x2, y2);
+        var obj1 = PopGameObject(y1, x1);
+        var obj2 = PopGameObject(y2, x2);
 
-        AddGameObject(obj2, x1, y1);
-        AddGameObject(obj1, x2, y2);
+        AddGameObject(obj2, y1, x1);
+        AddGameObject(obj1, y2, x2);
     }
 
     public void FallDown()
@@ -153,19 +153,21 @@ public class GameGrid
     /// <returns>The total points from all the matches.</returns>
     public int FindMatches(int points = 0)
     {
+        var currentPoints = points;
+
         // Search rows for matches
         for (int row = 0; row < _grid.GetLength(0); row++)
         {
             for (int col = 0; col < _grid.GetLength(1); col++)
             {
-                if (_grid[row, col] == null)
+                if (_grid.GetLength(1) - col < 3)
                     continue;
 
-                if (_grid.GetLength(1) - col < 3)
-                    continue;                
+                if (_grid[row, col] == null || _grid[row, col + 1] == null || _grid[row, col + 2] == null)
+                    continue;
 
-                if (_grid[row, col].CompareTag(_grid[row, col + 1]?.tag) &&
-                    _grid[row, col].CompareTag(_grid[row, col + 2]?.tag)
+                if (_grid[row, col].CompareTag(_grid[row, col + 1].tag) &&
+                    _grid[row, col].CompareTag(_grid[row, col + 2].tag)
                     )
                 {
                     // Delete all objects in the found matches
@@ -182,14 +184,14 @@ public class GameGrid
         {
             for (int col = 0; col < _grid.GetLength(1); col++)
             {
-                if (_grid[row, col] == null)
-                    continue;
-
                 if (_grid.GetLength(1) - row < 3)
                     continue;
 
-                if (_grid[row, col].CompareTag(_grid[row + 1, col]?.tag) &&
-                    _grid[row, col].CompareTag(_grid[row + 2, col]?.tag)
+                if (_grid[row, col] == null || _grid[row + 1, col] == null || _grid[row + 2, col] == null)
+                    continue;
+
+                if (_grid[row, col].CompareTag(_grid[row + 1, col].tag) &&
+                    _grid[row, col].CompareTag(_grid[row + 2, col].tag)
                     )
                 {
                     // Delete all objects in the found matches
@@ -201,8 +203,8 @@ public class GameGrid
             }
         }
 
-        if (points == 0)
-            return 0;
+        if (points == 0 || currentPoints == points)
+            return points;
 
         FallDown();
         SetGridPositions();
@@ -295,7 +297,7 @@ public class GridManager : MonoBehaviour
         if (selectedCount < 2)
             return;
 
-        if (selectedCount > 3)
+        if (selectedCount > 2)
         {
             // Something went wrong, clear selections
             _grid.ClearSelections();
