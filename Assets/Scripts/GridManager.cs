@@ -26,6 +26,14 @@ public class GameGrid
         _grid[row, col] = null;
     }
 
+    public GameObject PopGameObject(int row, int col)
+    {
+        var pop = _grid[row, col];
+        RemoveGameObject(row, col);
+
+        return pop;
+    }
+
     public void SetGridPositions()
     {
         for (int row = 0; row < _grid.GetLength(0); row++)
@@ -45,6 +53,9 @@ public class GameGrid
         var selected = 0;
         foreach (var icon in _grid)
         {
+            if (icon == null)
+                continue;
+
             if (icon.GetComponent<IconSelection>().Selected)
                 selected++;
         }
@@ -56,6 +67,9 @@ public class GameGrid
     {
         foreach (var icon in _grid)
         {
+            if (icon == null)
+                continue;
+
             icon.GetComponent<IconSelection>().Selected = false;
         }
     }
@@ -91,6 +105,9 @@ public class GameGrid
         {
             for (int col = 0; col < _grid.GetLength(1); col++)
             {
+                if (_grid[row, col] == null)
+                    continue;
+
                 if (_grid[row, col].GetComponent<IconSelection>().Selected)
                 {
                     if (x1 == -1)
@@ -110,6 +127,17 @@ public class GameGrid
         return (x1, y1, x2, y2);
     }
 
+    public void SwapSelections()
+    {
+        var (x1, y1, x2, y2) = GetSelectionCoordinates();
+
+        var obj1 = PopGameObject(x1, y1);
+        var obj2 = PopGameObject(x2, y2);
+
+        AddGameObject(obj2, x1, y1);
+        AddGameObject(obj1, x2, y2);
+    }
+
     public void FallDown()
     {
         // Search grid for null values
@@ -119,14 +147,67 @@ public class GameGrid
         // Top most field should be a new random icon type
     }
 
-    public void FindMatches()
+    /// <summary>
+    /// Finds and empties out matches recursively.
+    /// </summary>
+    /// <returns>The total points from all the matches.</returns>
+    public int FindMatches(int points = 0)
     {
-        // Search for matches
-        // Delete all objects in the found matches
+        // Search rows for matches
+        for (int row = 0; row < _grid.GetLength(0); row++)
+        {
+            for (int col = 0; col < _grid.GetLength(1); col++)
+            {
+                if (_grid[row, col] == null)
+                    continue;
 
-        // Loop until no more matches
-            // Call falldown
-            // FindMatches
+                if (_grid.GetLength(1) - col < 3)
+                    continue;                
+
+                if (_grid[row, col].CompareTag(_grid[row, col + 1]?.tag) &&
+                    _grid[row, col].CompareTag(_grid[row, col + 2]?.tag)
+                    )
+                {
+                    // Delete all objects in the found matches
+                    _grid[row, col] = _grid[row, col+1] = _grid[row, col+2] = null;
+                    points += 1;
+                    SetGridPositions();
+                    // Found match, continue checking for 3+
+                }
+            }
+        }
+
+        // Search cols for matches
+        for (int row = 0; row < _grid.GetLength(0); row++)
+        {
+            for (int col = 0; col < _grid.GetLength(1); col++)
+            {
+                if (_grid[row, col] == null)
+                    continue;
+
+                if (_grid.GetLength(1) - row < 3)
+                    continue;
+
+                if (_grid[row, col].CompareTag(_grid[row + 1, col]?.tag) &&
+                    _grid[row, col].CompareTag(_grid[row + 2, col]?.tag)
+                    )
+                {
+                    // Delete all objects in the found matches
+                    _grid[row, col] = _grid[row + 1, col] = _grid[row + 2, col] = null;
+                    points += 1;
+                    SetGridPositions();
+                    // Found match, continue checking for 3+
+                }
+            }
+        }
+
+        if (points == 0)
+            return 0;
+
+        FallDown();
+        SetGridPositions();
+
+        return FindMatches(points);
     }
 }
 
@@ -223,7 +304,20 @@ public class GridManager : MonoBehaviour
 
         if (_grid.CheckForAdjacents())
         {
-            _grid.FindMatches();
+            // Swap
+            _grid.SwapSelections();
+            _grid.SetGridPositions();
+
+            if (_grid.FindMatches() > 0)
+            {
+
+            }
+            else
+            {
+                _grid.SwapSelections();
+                _grid.ClearSelections();
+                _grid.SetGridPositions();
+            }            
         }
         else
         {

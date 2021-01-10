@@ -17,7 +17,9 @@ public class IconSelection : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {            
             Selected = true;
-            var gm = gameObject.GetComponent<GridManager>();
+
+            var gh = GameObject.Find("GridHolder");
+            var gm = gh.GetComponent<GridManager>();
             gm.CheckSwap();
         }
     }
