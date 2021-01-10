@@ -27,7 +27,7 @@ public class IconSelection : MonoBehaviour
 
         var gh = GameObject.Find("GridHolder");
         var gm = gh.GetComponent<GridManager>();
-        gm.CheckSwap();        
+        gm.CheckSwap();
     }
 
     public void Update()
