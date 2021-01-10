@@ -2,14 +2,21 @@
 
 public class IconSelection : MonoBehaviour
 {
+    public Sprite spriteUnselected;
+    public Sprite spriteSelected;
+
     public bool Selected = false;
 
-    public void OnMouseDown()
-    {
-        // Check if Selected is true or false. Set sprite accordingly
-        // TODO - swap out sprite for highlighted sprite
-        // https://answers.unity.com/questions/741893/how-to-change-sprite-image-on-click.html
+    private SpriteRenderer _spriteRenderer;
 
+    public void Start()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.sprite = spriteUnselected;
+    }
+
+    public void OnMouseDown()
+    {        
         if (Selected)
         {
             Selected = false;
@@ -21,5 +28,14 @@ public class IconSelection : MonoBehaviour
         var gh = GameObject.Find("GridHolder");
         var gm = gh.GetComponent<GridManager>();
         gm.CheckSwap();
+    }
+
+    public void Update()
+    {
+        // This is probably inefficient
+        if (Selected)
+            _spriteRenderer.sprite = spriteSelected;
+        else
+            _spriteRenderer.sprite = spriteUnselected;
     }
 }
