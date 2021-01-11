@@ -36,8 +36,6 @@ public class GridManager : MonoBehaviour
 
         _moves.Visible = true;
         _money.Visible = true;
-
-        Debug.Log("House tier:" + TierTracker.Tiers[TierTracker.TierTypes.House]);
     }    
 
     public void FillGrid()
