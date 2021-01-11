@@ -14,6 +14,8 @@ public class GridManager : MonoBehaviour
     public RandomIconHelper _randomIcons;
     public Money _money;
     public Moves _moves;
+    public AudioSource _swap;
+    public AudioSource _swapInvalid;
         
     private const int _gridHorizontalOffSet = -5;
 
@@ -68,6 +70,7 @@ public class GridManager : MonoBehaviour
 
             if (points > 0) // Continue loop
             {
+                _swap.Play();
                 _grid.FallDown();                
 
                 while (true)
@@ -85,6 +88,7 @@ public class GridManager : MonoBehaviour
             }
             else
             {
+                _swapInvalid.Play();
                 _grid.SwapSelections();
                 _grid.ClearSelections();
                 _grid.SetGridPositions();
