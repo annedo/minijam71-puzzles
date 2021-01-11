@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Upgrades : MonoBehaviour
 {
@@ -9,6 +7,7 @@ public class Upgrades : MonoBehaviour
     public Sprite spriteTier3;
 
     public int CurrentTier = 1;
+    public TierTracker.TierTypes TierType;
 
     private SpriteRenderer _spriteRenderer;
 
@@ -41,6 +40,8 @@ public class Upgrades : MonoBehaviour
         // Money check
         if (CurrentTier < 3)
             CurrentTier++;
-        // Perform upgrade if money check success
+        // TODO - Perform upgrade if money check success
+
+        TierTracker.Tiers[TierType] = CurrentTier;
     }
 }

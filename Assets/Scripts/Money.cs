@@ -12,6 +12,8 @@ public class Money : MonoBehaviour
     public Color BelowQuotaColor;
     public Color MetQuotaColor;
 
+    public bool Visible = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,5 +31,10 @@ public class Money : MonoBehaviour
             MoneyText.color = BelowQuotaColor;
         else
             MoneyText.color = MetQuotaColor;
+
+        if (!Visible)
+            gameObject.SetActive(false);
+        else
+            gameObject.SetActive(true);
     }
 }

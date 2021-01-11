@@ -33,6 +33,9 @@ public class GridManager : MonoBehaviour
 
         FillGrid();
         _grid.SetGridPositions();
+
+        _moves.Visible = true;
+        _money.Visible = true;
     }    
 
     public void FillGrid()
@@ -107,7 +110,11 @@ public class GridManager : MonoBehaviour
             if (_money.CurrentMoney < _money.Quota)
                 SceneManager.LoadScene("Gameover");
             else
+            {
+                _moves.Visible = false;
+                //_money.Visible = false;
                 SceneManager.LoadScene("Upgrades");
+            }       
         }
     }
 }
