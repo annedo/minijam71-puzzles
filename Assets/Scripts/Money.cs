@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Money : MonoBehaviour
@@ -13,6 +14,7 @@ public class Money : MonoBehaviour
     public Color MetQuotaColor;
 
     public bool Visible = true;
+    public bool QuotaVisible = true;
 
     // Start is called before the first frame update
     void Start()
@@ -27,14 +29,15 @@ public class Money : MonoBehaviour
         // Set text to currentMoney
         MoneyText.text = "$" + CurrentMoney.ToString();
 
-        if (CurrentMoney < Quota)
+        if (SceneManager.GetActiveScene().name == "Upgrades")
+            MoneyText.color = Color.black;
+        else if (CurrentMoney < Quota)
             MoneyText.color = BelowQuotaColor;
         else
             MoneyText.color = MetQuotaColor;
 
-        if (!Visible)
-            gameObject.SetActive(false);
-        else
-            gameObject.SetActive(true);
+        gameObject.SetActive(Visible);
+
+        QuotaText.gameObject.SetActive(QuotaVisible);
     }
 }

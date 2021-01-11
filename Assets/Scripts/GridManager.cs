@@ -112,7 +112,7 @@ public class GridManager : MonoBehaviour
             else
             {
                 _moves.Visible = false;
-                //_money.Visible = false;
+                _money.QuotaVisible = false;
                 SceneManager.LoadScene("Upgrades");
             }       
         }
