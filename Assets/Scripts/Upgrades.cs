@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Upgrades : MonoBehaviour
 {
@@ -6,8 +7,8 @@ public class Upgrades : MonoBehaviour
     public Sprite spriteTier2;
     public Sprite spriteTier3;
 
-    public int CurrentTier = 1;
-    public TierTracker.TierTypes TierType;
+    public TierTracker.TierTypes _tierType;
+    public Text _text;
 
     private SpriteRenderer _spriteRenderer;
 
@@ -21,7 +22,7 @@ public class Upgrades : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (CurrentTier)
+        switch (TierTracker.Tiers[_tierType])
         {
             case 1:
                 _spriteRenderer.sprite = spriteTier1;
@@ -33,15 +34,17 @@ public class Upgrades : MonoBehaviour
                 _spriteRenderer.sprite = spriteTier3;
                 break;
         }
+
+        _text.text = $"{_tierType.ToString().ToUpper()}\nL{TierTracker.Tiers[_tierType]}";
     }
 
     public void OnMouseDown()
     {
         // Money check
-        if (CurrentTier < 3)
-            CurrentTier++;
+        if (TierTracker.Tiers[_tierType] < 3)
+            TierTracker.Tiers[_tierType]++;
         // TODO - Perform upgrade if money check success
 
-        TierTracker.Tiers[TierType] = CurrentTier;
+        TierTracker.Tiers[_tierType] = TierTracker.Tiers[_tierType];
     }
 }

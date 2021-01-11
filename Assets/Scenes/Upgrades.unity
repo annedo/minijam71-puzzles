@@ -133,6 +133,16 @@ PrefabInstance:
       propertyPath: TierType
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: -3240073415404486653, guid: 79911ea5d76fa674e9e23b0f89931c8f,
+        type: 3}
+      propertyPath: _text
+      value: 
+      objectReference: {fileID: 1537701955}
+    - target: {fileID: -3240073415404486653, guid: 79911ea5d76fa674e9e23b0f89931c8f,
+        type: 3}
+      propertyPath: _tierType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2221644129620218376, guid: 79911ea5d76fa674e9e23b0f89931c8f,
         type: 3}
       propertyPath: m_Name
@@ -508,7 +518,7 @@ MonoBehaviour:
     m_LineSpacing: 0.75
   m_Text: 'BARN
 
-    L2'
+    L1'
 --- !u!222 &597983603
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -528,6 +538,17 @@ PrefabInstance:
         type: 3}
       propertyPath: TierType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -6202037317657087688, guid: 4eaea51f863787745bc56405bfdbcfbe,
+        type: 3}
+      propertyPath: _tierType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -6202037317657087688, guid: 4eaea51f863787745bc56405bfdbcfbe,
+        type: 3}
+      propertyPath: _text
+      value: 
+      objectReference: {fileID: 1332918363}
     - target: {fileID: -5905795553306039542, guid: 4eaea51f863787745bc56405bfdbcfbe,
         type: 3}
       propertyPath: m_Offset.y
@@ -712,6 +733,11 @@ PrefabInstance:
       propertyPath: CurrentTier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3742487251192843357, guid: d6b93467fe1e7a246aac106a211a4aaa,
+        type: 3}
+      propertyPath: _text
+      value: 
+      objectReference: {fileID: 716799563}
     - target: {fileID: 3815601183306262117, guid: d6b93467fe1e7a246aac106a211a4aaa,
         type: 3}
       propertyPath: m_Offset.x
@@ -1417,6 +1443,17 @@ PrefabInstance:
         type: 3}
       propertyPath: TierType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8383023525593809853, guid: c9c7db0a4c597d1468e402ec1417b872,
+        type: 3}
+      propertyPath: _tierType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8383023525593809853, guid: c9c7db0a4c597d1468e402ec1417b872,
+        type: 3}
+      propertyPath: _text
+      value: 
+      objectReference: {fileID: 597983602}
     - target: {fileID: -8079645523081147075, guid: c9c7db0a4c597d1468e402ec1417b872,
         type: 3}
       propertyPath: m_Offset.x
