@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -191,12 +193,36 @@ namespace Assets.Scripts
         {
             // TODO Check for Max, max -1, max - 2, etc            
 
+            // Get ALL matching icons in all rows + columns, then calculate score and delete
+            List<Tuple<int, int>> matchList = new List<Tuple<int, int>>();
+
             // Search rows for matches
             for (int row = 0; row < _grid.GetLength(0); row++)
             {
+                // For each row member, check if next tag is same to increase counter
+                // If next tag is null or different, check if counter is > 3 and add match coordinates to matchList
+                int matchCounter = 1;
                 for (int col = 0; col < _grid.GetLength(1); col++)
                 {
-                    if (_grid.GetLength(1) - col < 3)
+                    if (col + 1 == _grid.GetLength(1) || !_grid[row, col].CompareTag(_grid[row, col + 1].tag))
+                    {
+                        if (matchCounter >= 3)
+                        {
+                            // I did the math, trust me
+                            var rangeStart = col - (matchCounter - 1);
+                            var rangeEnd = col;
+
+                            for (int range = rangeStart; range <= rangeEnd; range++)
+                            {
+                                matchList.Add(Tuple.Create(row, range));
+                            }
+                        }
+                        matchCounter = 1;
+                    }
+                    else
+                        matchCounter++;
+
+                    /*if (_grid.GetLength(1) - col < 3)
                         continue;
 
                     if (_grid[row, col] == null || _grid[row, col + 1] == null || _grid[row, col + 2] == null)
@@ -204,12 +230,39 @@ namespace Assets.Scripts
 
                     if (_grid[row, col].CompareTag(_grid[row, col + 1].tag) &&
                         _grid[row, col].CompareTag(_grid[row, col + 2].tag))
-                        return PerformMatch(row, col, false);
+                        return PerformMatch(row, col, false);*/
                 }
             }
 
             // Search cols for matches
-            for (int row = 0; row < _grid.GetLength(0); row++)
+            for(int col = 0; col < _grid.GetLength(1); col++)
+            {
+                // For each col member, check if next tag is same to increase counter
+                // If next tag is null or different, check if counter is > 3 and add match coordinates to matchList
+                int matchCounter = 1;
+                for (int row = 0; row < _grid.GetLength(0); row++)
+                {
+                    if (row + 1 == _grid.GetLength(0) || !_grid[row, col].CompareTag(_grid[row + 1, col].tag))
+                    {
+                        if (matchCounter >= 3)
+                        {
+                            // I did the math, trust me
+                            var rangeStart = row - (matchCounter - 1);
+                            var rangeEnd = row;
+
+                            for (int range = rangeStart; range <= rangeEnd; range++)
+                            {
+                                matchList.Add(Tuple.Create(range, col));
+                            }
+                        }
+                        matchCounter = 1;
+                    }
+                    else
+                    matchCounter++;
+                    
+                }
+            }
+            /*for (int row = 0; row < _grid.GetLength(0); row++)
             {
                 for (int col = 0; col < _grid.GetLength(1); col++)
                 {
@@ -223,7 +276,8 @@ namespace Assets.Scripts
                         _grid[row, col].CompareTag(_grid[row + 2, col].tag))
                         return PerformMatch(row, col, true);
                 }
-            }
+            }*/
+            System.Diagnostics.Trace.WriteLine(matchList[6]);
 
             return 0;
         }
