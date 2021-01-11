@@ -26,13 +26,23 @@ namespace Assets.Scripts
 
         public GameObject GetRandomTile()
         {
-            var spawnType = _random.Next(1, 5); // 1, 2, 3 or 4
+            var currentBarnTier = TierTracker.CurrentTier[TierTracker.TierTypes.Barn];
+
+            int spawnType;
+            if (currentBarnTier == 2)
+                spawnType = _random.Next(1, 6); // 1,2,3,4,5
+            else if (currentBarnTier == 3)
+                spawnType = _random.Next(1, 7); // 1,2,3,4,5,6
+            else
+                spawnType = _random.Next(1, 5); // 1,2,3,4
 
             switch (spawnType)
             {
-                case 1:
+                case 1:                
                     return Instantiate(_cornTileRef, transform);
                 case 2:
+                case 5:
+                case 6:
                     return Instantiate(_chickenTileRef, transform);
                 case 3:
                     return Instantiate(_hayTileRef, transform);
