@@ -214,7 +214,10 @@ namespace Assets.Scripts
 
                             for (int range = rangeStart; range <= rangeEnd; range++)
                             {
-                                matchList.Add(Tuple.Create(row, range));
+                                // If already in list, do not add to avoid null reference when removing
+                                var coords = Tuple.Create(row, range);
+                                if (!matchList.Contains(coords))
+                                    matchList.Add(coords);
                             }
                         }
                         matchCounter = 1;
@@ -252,7 +255,10 @@ namespace Assets.Scripts
 
                             for (int range = rangeStart; range <= rangeEnd; range++)
                             {
-                                matchList.Add(Tuple.Create(range, col));
+                                // If already in list, do not add to avoid null reference when removing
+                                var coords = Tuple.Create(range, col);
+                                if (!matchList.Contains(coords))
+                                    matchList.Add(coords);
                             }
                         }
                         matchCounter = 1;
@@ -279,10 +285,33 @@ namespace Assets.Scripts
             }*/
             System.Diagnostics.Trace.WriteLine(matchList[6]);
 
-            return 0;
+            return PerformMatch(matchList);
         }
 
-        public int PerformMatch(int row, int col, bool IsRowMatch)
+        public int PerformMatch(List<Tuple<int, int>> MatchesList)
+        {
+            var towerTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tower];
+            var treeTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tree];
+
+            var points = 0;
+
+            foreach (var coord in MatchesList)
+            {
+                string iconType = _grid[coord.Item1, coord.Item2].tag;
+
+                if (towerTier > 1 && iconType == "Corn")
+                    points += 1 * treeTier + towerTier;
+                else
+                    points += 1 * treeTier;
+
+                RemoveGameObject(coord.Item1, coord.Item2);
+            }
+
+            SetGridPositions();
+            return points;
+        }
+
+        /*public int PerformMatch(int row, int col, bool IsRowMatch)
         {
             var towerTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tower];
             var treeTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tree];
@@ -310,6 +339,6 @@ namespace Assets.Scripts
                     return 1 * treeTier + towerTier;
 
             return 1 * treeTier;
-        }
+        }*/
     }
 }
