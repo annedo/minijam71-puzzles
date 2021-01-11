@@ -19,7 +19,7 @@ public class GridManager : MonoBehaviour
     public AudioSource _swap;
     public AudioSource _swapInvalid;
     
-    private const int _gridHorizontalOffSet = -5;
+    private const int _gridHorizontalOffSet = -4;
 
     private GameGrid _grid;
     private Money _money;
