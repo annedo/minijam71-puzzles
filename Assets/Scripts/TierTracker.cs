@@ -9,7 +9,7 @@ public static class TierTracker
         Tiers = new Dictionary<TierTypes, int>()
         {
             { TierTypes.Tower, 1 },
-            { TierTypes.House, 1 },
+            { TierTypes.Barn, 1 },
             { TierTypes.Tree, 1 },
             { TierTypes.Tractor, 1 }
         };
@@ -17,7 +17,7 @@ public static class TierTracker
     public enum TierTypes
     {
         Tower,
-        House,
+        Barn,
         Tree,
         Tractor
     }
