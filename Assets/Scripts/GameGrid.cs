@@ -189,7 +189,7 @@ namespace Assets.Scripts
         /// <returns>The total points from the first match found.</returns>
         public int FindMatches()
         {
-            // TODO Check for Max, max -1, max - 2, etc
+            // TODO Check for Max, max -1, max - 2, etc            
 
             // Search rows for matches
             for (int row = 0; row < _grid.GetLength(0); row++)
@@ -203,16 +203,8 @@ namespace Assets.Scripts
                         continue;
 
                     if (_grid[row, col].CompareTag(_grid[row, col + 1].tag) &&
-                        _grid[row, col].CompareTag(_grid[row, col + 2].tag)
-                        )
-                    {
-                        // Delete all objects in the found matches
-                        RemoveGameObject(row, col);
-                        RemoveGameObject(row, col + 1);
-                        RemoveGameObject(row, col + 2);
-                        SetGridPositions();
-                        return 1;
-                    }
+                        _grid[row, col].CompareTag(_grid[row, col + 2].tag))
+                        return PerformMatch(row, col, false);
                 }
             }
 
@@ -228,20 +220,42 @@ namespace Assets.Scripts
                         continue;
 
                     if (_grid[row, col].CompareTag(_grid[row + 1, col].tag) &&
-                        _grid[row, col].CompareTag(_grid[row + 2, col].tag)
-                        )
-                    {
-                        // Delete all objects in the found matches
-                        RemoveGameObject(row, col);
-                        RemoveGameObject(row + 1, col);
-                        RemoveGameObject(row + 2, col);
-                        SetGridPositions();
-                        return 1;
-                    }
+                        _grid[row, col].CompareTag(_grid[row + 2, col].tag))
+                        return PerformMatch(row, col, true);
                 }
             }
 
             return 0;
+        }
+
+        public int PerformMatch(int row, int col, bool IsRowMatch)
+        {
+            var towerTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tower];
+            var treeTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tree];
+
+            var iconType = _grid[row, col].tag;
+
+            // Delete all objects in the found matches
+            RemoveGameObject(row, col);
+
+            if (IsRowMatch)
+            {
+                RemoveGameObject(row + 1, col);
+                RemoveGameObject(row + 2, col);
+            }
+            else
+            {
+                RemoveGameObject(row, col + 1);
+                RemoveGameObject(row, col + 2);
+            }
+            
+            SetGridPositions();
+
+            if (towerTier > 1)
+                if (iconType == "Corn")
+                    return 1 * treeTier + towerTier;
+
+            return 1 * treeTier;
         }
     }
 }

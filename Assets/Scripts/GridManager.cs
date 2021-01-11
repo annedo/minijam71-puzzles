@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static TierTracker;
 
 public class GridManager : MonoBehaviour
 {
@@ -12,14 +14,15 @@ public class GridManager : MonoBehaviour
     private float _tileSize = 1;
 
     public RandomIconHelper _randomIcons;
-    public Money _money;
     public Moves _moves;
+    
     public AudioSource _swap;
     public AudioSource _swapInvalid;
-        
+    
     private const int _gridHorizontalOffSet = -5;
 
-    private GameGrid _grid;    
+    private GameGrid _grid;
+    private Money _money;
 
     private float GridHeight => _rows * _tileSize;
     private float GridWidth => _cols * _tileSize;
@@ -34,9 +37,13 @@ public class GridManager : MonoBehaviour
         FillGrid();
         _grid.SetGridPositions();
 
-        _moves.Visible = true;
-        _money.Visible = true;
-    }    
+        _money = (Money)Resources.FindObjectsOfTypeAll(typeof(Money))[0];
+
+        _money.gameObject.SetActive(true);
+        _moves.MovesRemaining = 15 + (CurrentTier[TierTypes.Tractor] * 5);
+
+        _money.QuotaVisible = true;
+    }
 
     public void FillGrid()
     {
@@ -108,10 +115,18 @@ public class GridManager : MonoBehaviour
         {
             // Check quota
             if (_money.CurrentMoney < _money.Quota)
-                SceneManager.LoadScene("Gameover");
+            {
+                _money.CurrentMoney = 0;
+                
+                foreach (TierTypes type in Enum.GetValues(typeof(TierTypes)))
+                    CurrentTier[type] = 1;
+
+                _money.gameObject.SetActive(false);
+
+                SceneManager.LoadScene("Gameover");                
+            }                
             else
             {
-                _moves.Visible = false;
                 _money.QuotaVisible = false;
                 SceneManager.LoadScene("Upgrades");
             }       
