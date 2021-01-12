@@ -81,7 +81,7 @@ public class GridManager : MonoBehaviour
             if (points > 0) // Continue loop
             {
                 _swap.Play();
-                _grid.FallDown();                
+                _grid.FallDown();
 
                 while (true)
                 {

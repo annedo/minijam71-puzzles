@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -191,71 +193,95 @@ namespace Assets.Scripts
         {
             // TODO Check for Max, max -1, max - 2, etc            
 
+            // Get ALL matching icons in all rows + columns, then calculate score and delete
+            List<Tuple<int, int>> matchList = new List<Tuple<int, int>>();
+
             // Search rows for matches
             for (int row = 0; row < _grid.GetLength(0); row++)
             {
+                // For each row member, check if next tag is same to increase counter
+                // If next tag is null or different, check if counter is > 3 and add match coordinates to matchList
+                int matchCounter = 1;
                 for (int col = 0; col < _grid.GetLength(1); col++)
                 {
-                    if (_grid.GetLength(1) - col < 3)
-                        continue;
+                    if (col + 1 == _grid.GetLength(1) || !_grid[row, col].CompareTag(_grid[row, col + 1].tag))
+                    {
+                        if (matchCounter >= 3)
+                        {
+                            // I did the math, trust me
+                            var rangeStart = col - (matchCounter - 1);
+                            var rangeEnd = col;
 
-                    if (_grid[row, col] == null || _grid[row, col + 1] == null || _grid[row, col + 2] == null)
-                        continue;
-
-                    if (_grid[row, col].CompareTag(_grid[row, col + 1].tag) &&
-                        _grid[row, col].CompareTag(_grid[row, col + 2].tag))
-                        return PerformMatch(row, col, false);
+                            for (int range = rangeStart; range <= rangeEnd; range++)
+                            {
+                                // If already in list, do not add to avoid null reference when removing
+                                var coords = Tuple.Create(row, range);
+                                if (!matchList.Contains(coords))
+                                    matchList.Add(coords);
+                            }
+                        }
+                        matchCounter = 1;
+                    }
+                    else
+                        matchCounter++;
                 }
             }
 
             // Search cols for matches
-            for (int row = 0; row < _grid.GetLength(0); row++)
+            for(int col = 0; col < _grid.GetLength(1); col++)
             {
-                for (int col = 0; col < _grid.GetLength(1); col++)
+                // For each col member, check if next tag is same to increase counter
+                // If next tag is null or different, check if counter is > 3 and add match coordinates to matchList
+                int matchCounter = 1;
+                for (int row = 0; row < _grid.GetLength(0); row++)
                 {
-                    if (_grid.GetLength(0) - row < 3)
-                        continue;
+                    if (row + 1 == _grid.GetLength(0) || !_grid[row, col].CompareTag(_grid[row + 1, col].tag))
+                    {
+                        if (matchCounter >= 3)
+                        {
+                            // I did the math, trust me
+                            var rangeStart = row - (matchCounter - 1);
+                            var rangeEnd = row;
 
-                    if (_grid[row, col] == null || _grid[row + 1, col] == null || _grid[row + 2, col] == null)
-                        continue;
-
-                    if (_grid[row, col].CompareTag(_grid[row + 1, col].tag) &&
-                        _grid[row, col].CompareTag(_grid[row + 2, col].tag))
-                        return PerformMatch(row, col, true);
+                            for (int range = rangeStart; range <= rangeEnd; range++)
+                            {
+                                // If already in list, do not add to avoid null reference when removing
+                                var coords = Tuple.Create(range, col);
+                                if (!matchList.Contains(coords))
+                                    matchList.Add(coords);
+                            }
+                        }
+                        matchCounter = 1;
+                    }
+                    else
+                    matchCounter++;
+                    
                 }
             }
-
-            return 0;
+            return PerformMatch(matchList);
         }
 
-        public int PerformMatch(int row, int col, bool IsRowMatch)
+        public int PerformMatch(List<Tuple<int, int>> MatchesList)
         {
             var towerTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tower];
             var treeTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tree];
 
-            var iconType = _grid[row, col].tag;
+            var points = 0;
 
-            // Delete all objects in the found matches
-            RemoveGameObject(row, col);
+            foreach (var coord in MatchesList)
+            {
+                string iconType = _grid[coord.Item1, coord.Item2].tag;
 
-            if (IsRowMatch)
-            {
-                RemoveGameObject(row + 1, col);
-                RemoveGameObject(row + 2, col);
-            }
-            else
-            {
-                RemoveGameObject(row, col + 1);
-                RemoveGameObject(row, col + 2);
+                if (towerTier > 1 && iconType == "Corn")
+                    points += 1 * treeTier + towerTier;
+                else
+                    points += 1 * treeTier;
+
+                RemoveGameObject(coord.Item1, coord.Item2);
             }
             
             SetGridPositions();
-
-            if (towerTier > 1)
-                if (iconType == "Corn")
-                    return 1 * treeTier + towerTier;
-
-            return 1 * treeTier;
+            return points;
         }
     }
 }
