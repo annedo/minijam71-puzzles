@@ -224,16 +224,6 @@ namespace Assets.Scripts
                     }
                     else
                         matchCounter++;
-
-                    /*if (_grid.GetLength(1) - col < 3)
-                        continue;
-
-                    if (_grid[row, col] == null || _grid[row, col + 1] == null || _grid[row, col + 2] == null)
-                        continue;
-
-                    if (_grid[row, col].CompareTag(_grid[row, col + 1].tag) &&
-                        _grid[row, col].CompareTag(_grid[row, col + 2].tag))
-                        return PerformMatch(row, col, false);*/
                 }
             }
 
@@ -268,23 +258,6 @@ namespace Assets.Scripts
                     
                 }
             }
-            /*for (int row = 0; row < _grid.GetLength(0); row++)
-            {
-                for (int col = 0; col < _grid.GetLength(1); col++)
-                {
-                    if (_grid.GetLength(0) - row < 3)
-                        continue;
-
-                    if (_grid[row, col] == null || _grid[row + 1, col] == null || _grid[row + 2, col] == null)
-                        continue;
-
-                    if (_grid[row, col].CompareTag(_grid[row + 1, col].tag) &&
-                        _grid[row, col].CompareTag(_grid[row + 2, col].tag))
-                        return PerformMatch(row, col, true);
-                }
-            }*/
-            System.Diagnostics.Trace.WriteLine(matchList[6]);
-
             return PerformMatch(matchList);
         }
 
@@ -306,39 +279,9 @@ namespace Assets.Scripts
 
                 RemoveGameObject(coord.Item1, coord.Item2);
             }
-
+            
             SetGridPositions();
             return points;
         }
-
-        /*public int PerformMatch(int row, int col, bool IsRowMatch)
-        {
-            var towerTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tower];
-            var treeTier = TierTracker.CurrentTier[TierTracker.TierTypes.Tree];
-
-            var iconType = _grid[row, col].tag;
-
-            // Delete all objects in the found matches
-            RemoveGameObject(row, col);
-
-            if (IsRowMatch)
-            {
-                RemoveGameObject(row + 1, col);
-                RemoveGameObject(row + 2, col);
-            }
-            else
-            {
-                RemoveGameObject(row, col + 1);
-                RemoveGameObject(row, col + 2);
-            }
-            
-            SetGridPositions();
-
-            if (towerTier > 1)
-                if (iconType == "Corn")
-                    return 1 * treeTier + towerTier;
-
-            return 1 * treeTier;
-        }*/
     }
 }
